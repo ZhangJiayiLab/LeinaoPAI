@@ -41,14 +41,7 @@ RUN DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
         setuptools \
         && \
     $PIP_INSTALL \
-        scipy numpy matplotlib h5py pandas && \
-
-RUN wget -O libsvm.tar.gz http://www.csie.ntu.edu.tw/~cjlin/cgi-bin/libsvm.cgi?+http://www.csie.ntu.edu.tw/~cjlin/libsvm+tar.gz && \
-    tar xzf libsvm.tar.gz && \
-    cd libsvm && \
-    make && cd python && make && cd .. && \
-    #ln -s $(pwd)/python /opt/conda/lib/python3.6/site-packages/libsvm && \
-    cd ..
+        scipy numpy matplotlib h5py pandas scikit-learn && \
 
 EXPOSE 6006
 WORKDIR /userhome
