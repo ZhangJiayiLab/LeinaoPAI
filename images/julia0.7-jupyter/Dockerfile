@@ -1,95 +1,18 @@
-# ==================================================================
-# module list
-# ------------------------------------------------------------------
-# python        3.6    (apt)
-# pytorch       0.3.1  (pip)
-# opencv        3.4.1  (git)
-# ==================================================================
+FROM ufoym/deepo:all-jupyter-py36-cu90
 
-FROM nvidia/cuda:8.0-cudnn7-devel-ubuntu16.04
 
-ENV PYTHONPATH=".:$PYTHONPATH"
-
+# ===== ssh service =====
 RUN sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
-    APT_INSTALL="apt-get install -y --no-install-recommends" && \
-    PIP_INSTALL="python -m pip --no-cache-dir install --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple " && \
-    GIT_CLONE="git clone --depth 10" && \
-
-    rm -rf /var/lib/apt/lists/* \
-           /etc/apt/sources.list.d/cuda.list \
-           /etc/apt/sources.list.d/nvidia-ml.list && \
-
-    apt-get update && \
-
-# ==================================================================
-# tools
-# ------------------------------------------------------------------
-
-    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-        build-essential \
-        ca-certificates \
-        cmake \
-        wget \
-        git \
-        vim \
-        zip \
-        openssh-client \
-        openssh-server \
-        python-tk \
-        && \
-
-# ==================================================================
-# python
-# ------------------------------------------------------------------
-
-    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-        software-properties-common \
-        && \
-    add-apt-repository ppa:jonathonf/python-3.6 && \
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-        python3.6 \
-        python3.6-dev \
-        && \
-    wget -O ~/get-pip.py \
-        https://bootstrap.pypa.io/get-pip.py && \
-    python3.6 ~/get-pip.py && \
-    ln -s /usr/bin/python3.6 /usr/local/bin/python3 && \
-    ln -s /usr/bin/python3.6 /usr/local/bin/python && \
-    $PIP_INSTALL \
-        setuptools \
-        && \
-    $PIP_INSTALL \
-        numpy \
-        h5py \
-        scipy \
-        pandas \
-        scikit-learn \
-        matplotlib \
-        Cython \
-        visdom \
-        dominate \
-        && \
-
-# ==================================================================
-# pytorch
-# ------------------------------------------------------------------
-
-    $PIP_INSTALL \
-        http://download.pytorch.org/whl/cu80/torch-0.3.1-cp36-cp36m-linux_x86_64.whl \
-        torchvision \
-        && \
-
-# ==================================================================
-
-
-# ==================================================================
-# config & cleanup
-# ------------------------------------------------------------------
-
-    ldconfig && \
+    apt update && \
+    apt install -y openssh-server openssh-client wget && \
     apt-get clean && \
     apt-get autoremove && \
     rm -rf /var/lib/apt/lists/* /tmp/* ~/*
 
-EXPOSE 6006
+# ===== install julia =====
+RUN wget -O julia_bin.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/0.7/julia-0.7.0-linux-x86_64.tar.gz && \
+    tar xzf julia_bin.tar.gz && \
+    ln -s /julia-1.0.2/bin/julia /usr/local/bin/julia
+
+# ===== julia package install =====
+RUN julia -e "ENV[\"JUPYTER\"]=\"jupyter\"; using Pkg; Pkg.resolve(); Pkg.add.(\"IJulia\")"
