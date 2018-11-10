@@ -11,8 +11,8 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list &&
 
 # ===== install julia =====
 RUN wget -O julia_bin.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/0.7/julia-0.7.0-linux-x86_64.tar.gz && \
-    tar xzf julia_bin.tar.gz && \
-    ln -s /julia-1.0.2/bin/julia /usr/local/bin/julia
+    tar xzf julia_bin.tar.gz
 
 # ===== julia package install =====
+ENV PATH=/julia-1.0.2/bin:$PATH
 RUN julia -e "ENV[\"JUPYTER\"]=\"jupyter\"; using Pkg; Pkg.resolve(); Pkg.add.(\"IJulia\")"
