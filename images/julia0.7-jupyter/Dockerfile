@@ -9,11 +9,8 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list &&
     apt-get autoremove && \
     rm -rf /var/lib/apt/lists/* /tmp/* ~/*
 
-# ===== install julia =====
-RUN wget -O julia_bin.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/0.7/julia-0.7.0-linux-x86_64.tar.gz && \
-    tar xzf julia_bin.tar.gz
+RUN apt-get install -y python-software-properties software-properties-common
 
-# ===== julia package install =====
-RUN cd julia-0.7.0/bin && ./julia -e "ENV[\"JUPYTER\"]=\"jupyter\"; using Pkg; Pkg.resolve(); Pkg.add.(\"IJulia\")"
-
-ENV PATH=/julia-0.7.0/bin:$PATH
+RUN apt-get-repository ppa:staticfloat/juliareleases && apt-get update
+RUN apt-get install -y julia
+RUN julia -e "using Pkg; Pkg.resolve()"
