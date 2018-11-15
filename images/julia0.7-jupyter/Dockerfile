@@ -14,6 +14,6 @@ RUN wget -O julia_bin.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/0.
     tar xzf julia_bin.tar.gz
 
 # ===== julia package install =====
-RUN cd julia-0.7.0/bin && julia -e "ENV[\"JUPYTER\"]=\"jupyter\"; using Pkg; Pkg.resolve(); Pkg.add.(\"IJulia\")"
+RUN cd julia-0.7.0/bin && ./julia -e "ENV[\"JUPYTER\"]=\"jupyter\"; using Pkg; Pkg.resolve(); Pkg.add.(\"IJulia\")"
 
 ENV PATH=/julia-0.7.0/bin:$PATH
