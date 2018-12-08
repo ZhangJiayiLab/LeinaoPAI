@@ -19,6 +19,8 @@ Pkg.add.([
 
           # "MXNet"  # not supported yet
 
+          "MultivariateStats", "MAT",
+
           # MISC
           "ProgressMeter",
          ])
