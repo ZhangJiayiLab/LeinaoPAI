@@ -4,7 +4,7 @@ COPY install_julia_package.jl /
 # ===== ssh service =====
 RUN sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
     apt update && \
-    apt install -y openssh-server openssh-client && \
+    apt install -y openssh-server openssh-client curl && \
     apt-get clean && \
     apt-get autoremove && \
     rm -rf /var/lib/apt/lists/* /tmp/* ~/*
