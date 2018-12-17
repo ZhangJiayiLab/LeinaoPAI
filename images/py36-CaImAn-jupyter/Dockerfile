@@ -1,6 +1,6 @@
 FROM ufoym/deepo:all-jupyter-py36-cu90
 
-CMD /bin/bash
+SHELL ["/bin/bash", "-c"]
 
 # ===== ssh service =====
 RUN sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
