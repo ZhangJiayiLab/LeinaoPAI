@@ -11,7 +11,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list &&
     rm -rf /var/lib/apt/lists/* /tmp/* ~/*
 
 RUN curl -L https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /miniconda_install.sh && \
-    bash /miniconda.sh -b -p /miniconda
+    bash /miniconda_install.sh -b -p /miniconda
 
 ENV PATH="/miniconda/bin:$PATH"
 
